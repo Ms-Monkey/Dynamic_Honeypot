@@ -16,6 +16,9 @@ HONEYPOT_DICTS = []
 #@click.command()
 #@click.option("--user-defined", default=None, help="User defined honeypot creation system")
 def main():
+    '''
+    For optimal results praise the Omnissiah and honour your devices machine spirit before executing this program
+    '''
     global HONEYPOT_DICTS
     HONEYPOT_DICTS = []
     #TODO: Create list of OS's when user creates own honeypots
