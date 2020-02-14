@@ -1,4 +1,3 @@
-# pylint disable=C90, C91, C118
 import os
 import pickle
 import random
@@ -9,8 +8,6 @@ import click
 from beautifultable import BeautifulTable
 
 HONEYPOT_DICTS = {}
-
-#TODO: Output the config dict as a json file or something
 
 @click.command()
 @click.option("--nmap_file", default=None, help="An xml file created by an nmap scan of the destination network")
@@ -30,17 +27,13 @@ def main(subnet, nmap_file=None, quick_scan=False):
     network = ipaddress.IPv4Network(unicode("192.168.1.0/24", 'utf-8'))
 
     free_ips = get_free_ipv4_addresses(ip_list, network)
-    #calculate_honeypots(free_ips, network)
 
-    # Prints out network stats
-    print_network(free_ips)
+    print_network_stats(free_ips)
     output_dict = {'configs': HONEYPOT_DICTS, 'ips': free_ips}
     with open("/tmp/network_config.pkl", "wb") as pkl:
          pickle.dump(output_dict, pkl)
 
 
-# When OS is found, try to match it. If no match add all details
-# if match, add any unadded ports
 def parse_os(root, ip, port_list):
     global HONEYPOT_DICTS
     os_dict = {}
@@ -70,7 +63,6 @@ def parse_os(root, ip, port_list):
             HONEYPOT_DICTS.append(os_dict)
 
 
-#TODO: Use a library or something to call nmap
 def scan_network(subnet, quick_scan):
     hour_minute = datetime.datetime.now().strftime("%H%M_%d%m%y")
     filepath = ("/tmp/%s_nmap" % hour_minute)
@@ -151,7 +143,7 @@ def parse_xml(root):
     return (ip_list)
 
 
-def print_network(free_ips):
+def print_network_stats(free_ips):
     print("Subnet: \t/24")
     print("Used IP's: \t%s" % len(HONEYPOT_DICTS))
     print("Free IP's: \t%s" % len(free_ips))
